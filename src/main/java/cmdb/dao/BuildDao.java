@@ -10,4 +10,6 @@ public interface BuildDao {
 	BaseResponse<Build> addBuild(Build request);
 
 	BaseResponse<List<Build>> getBuild(Build request) throws IllegalArgumentException, IllegalAccessException;
+	
+	String getBuildId() ;
 }

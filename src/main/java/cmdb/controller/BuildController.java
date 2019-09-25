@@ -2,6 +2,7 @@ package cmdb.controller;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,25 +21,27 @@ public class BuildController {
 	
 	@Autowired
 	BuildService buildService;
+	
+	private static final Logger logger = Logger.getLogger(BuildController.class);
 
 	@RequestMapping(value = "/add", 
 			method = RequestMethod.POST,consumes=MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public BaseResponse<Build> addBuild(@RequestBody Build request) {
-
-		System.out.println("Req is - " + request);		
+		request.setBuildId(buildService.getBuildId());
+		logger.info("Req is - " + request);		
 		return buildService.addBuild(request);
 	}
 
 	@RequestMapping(value = "/get", method = RequestMethod.POST)
 	public BaseResponse<List<Build>> getBuild(@RequestBody Build request) throws IllegalArgumentException, IllegalAccessException {
-		System.out.println("Req is - " + request);		
+		logger.info("Req is - " + request);		
 		return buildService.getBuild(request);
 	}
 
 	@RequestMapping(value = "/test", method = RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
 	public BaseResponse<String> test() {
-
+		logger.info("Build webservice test successful!!!");
 		return new BaseResponse<String>(CommonConstants.SUCCESS_STATUS, "Build webservice test successful!!!", null);
 	}
 

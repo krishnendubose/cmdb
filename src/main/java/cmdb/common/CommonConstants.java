@@ -9,14 +9,15 @@ public interface CommonConstants {
 	 * Build related constants
 	 */
 	String ADD_BUILD = "INSERT INTO CMDB.BUILD "
-			+ "(appName, "
+			+ "(buildId,"
+			+ "appName, "
 			+ "appVersion, "
 			+ "buildVersion,"
 			+ "buildDate,"
 			+ "buildStatus,"
 			+ "buildBy,"
 			+ "commitId) "
-			+ "VALUES (?, ?, ?, ? , ?, ? , ? )";
+			+ "VALUES (?,?, ?, ?, ? , ?, ? , ? )";
 	
 	String ADD_BUILD_SUCCESS = "Build details added successfully.";
 	String ADD_BUILD_FAILURE = "Build details add failed.";
@@ -24,4 +25,6 @@ public interface CommonConstants {
 	String SELECT_BUILD = "SELECT * FROM CMDB.BUILD ";
 	String SELECT_BUILD_SUCCESS = "Build details fetched successfully.";
 	String SELECT_BUILD_FAILURE = "Build details fetch failed, no data exists.";
+	
+	String GET_BUILD_ID = "select t from ( values next value for cmdb_buildId ) s( t)";
 }

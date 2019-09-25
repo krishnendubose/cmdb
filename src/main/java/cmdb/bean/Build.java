@@ -8,6 +8,8 @@ import lombok.ToString;
 @Setter
 @ToString
 public class Build {
+	
+	private String buildId;
 	private String appName;
 	private String appVersion;
 	private String buildVersion;
@@ -15,4 +17,5 @@ public class Build {
 	private String buildStatus;
 	private String buildBy;
 	private String commitId;
+	
 }

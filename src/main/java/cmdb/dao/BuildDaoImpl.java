@@ -1,28 +1,31 @@
 package cmdb.dao;
 
-import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Objects;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import org.springframework.util.StringUtils;
-
 import cmdb.bean.BaseResponse;
 import cmdb.bean.Build;
 import cmdb.common.CommonConstants;
+import cmdb.common.Util;
 
 @Repository
 public class BuildDaoImpl implements BuildDao {
 
 	@Autowired
 	JdbcTemplate jdbcTemplate;
+	
+	private static final Logger logger = Logger.getLogger(BuildDaoImpl.class);
 
 	public BaseResponse<Build> addBuild(Build request) {
-		// TODO Auto-generated method stub
+		logger.info("In addBuild()");
+		
 		int numOfRows = jdbcTemplate.update(CommonConstants.ADD_BUILD, new Object[] {
+				request.getBuildId(),
 				request.getAppName(),
 				request.getAppVersion(),
 				request.getBuildVersion(),
@@ -39,18 +42,12 @@ public class BuildDaoImpl implements BuildDao {
 	}
 
 	public BaseResponse<List<Build>> getBuild(Build request) throws IllegalArgumentException, IllegalAccessException {
-		// TODO Auto-generated method stub
-		StringBuilder query = new StringBuilder();
-		Field[] fields = Build.class.getDeclaredFields();
-		for(Field field: fields) {
-			field.setAccessible(true);
-			if(!StringUtils.isEmpty(field.get(request))){
-				String queryPart = field.getName() + "='" + field.get(request) + "'";
-				queryPart = StringUtils.isEmpty(query.toString())?" WHERE " + queryPart:" AND " + queryPart;
-				query.append(queryPart);
-			}
-		}
-		System.out.println("Final query for Build data selection: " + query.insert(0, CommonConstants.SELECT_BUILD).toString());
+		logger.info("In getBuild()");
+		
+		StringBuilder query = new StringBuilder()
+				.append(Util.fetchGetBuildQuery(request))
+				.insert(0, CommonConstants.SELECT_BUILD);		
+		logger.info("Final query for Build data selection: " + query.toString());
 		
 		 @SuppressWarnings({ "unchecked", "rawtypes" })
 		List<Build> customers = jdbcTemplate.query(
@@ -65,5 +62,15 @@ public class BuildDaoImpl implements BuildDao {
 		}
 
 	}
+
+	public String getBuildId() {
+		// TODO Auto-generated method stub
+		
+		logger.info("In getBuildId()");
+		return jdbcTemplate.queryForObject(CommonConstants.GET_BUILD_ID, String.class);
+	}
+	
+	
+	
 
 }
